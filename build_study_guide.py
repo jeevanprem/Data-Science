@@ -21,7 +21,9 @@ from guide_modules.week5 import get_week5_content
 from guide_modules.week6 import get_week6_content
 from guide_modules.week7 import get_week7_content
 from guide_modules.week8 import get_week8_content
+from guide_modules.practice_bank import get_practice_bank_content
 from guide_modules.exam_cheatsheet import get_exam_cheatsheet_content
+from guide_modules.weekly_tests import get_week_test_content
 
 def get_header_and_styles():
     return """<!DOCTYPE html>
@@ -649,6 +651,222 @@ def get_header_and_styles():
         .q-tag-concept { background: #dbeafe; color: #1e40af; }
         .q-tag-calc { background: #fef3c7; color: #92400e; }
         .q-tag-assignment { background: #dcfce7; color: #166534; font-weight: 800; }
+        .q-tag-mcq { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; font-weight: 800; }
+        .q-tag-msq { background: #f3e8ff; color: #6b21a8; border: 1px solid #e9d5ff; font-weight: 800; }
+
+        /* Sidebar Section Header */
+        .nav-section-title {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #94a3b8;
+            padding: 14px 12px 6px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            margin-top: 8px;
+            list-style: none;
+        }
+
+        /* Sticky Practice Questions Navbar */
+        .practice-navbar-sticky {
+            position: sticky;
+            top: 16px;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.94);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 32px;
+            padding: 16px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .practice-navbar-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .practice-navbar-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .practice-navbar-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .practice-icon {
+            font-size: 1.4rem;
+            background: #e0f2fe;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .practice-title {
+            font-weight: 800;
+            font-size: 1rem;
+            color: var(--primary-navy);
+            letter-spacing: -0.01em;
+        }
+
+        .practice-sub {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+        }
+
+        .practice-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-practice-action {
+            background: #f1f5f9;
+            color: var(--secondary-navy);
+            border: 1px solid var(--border-light);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-practice-action:hover {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+
+        .practice-navbar-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .practice-jump-row, .practice-filter-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .practice-label {
+            font-size: 0.74rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-light);
+            min-width: 125px;
+        }
+
+        .practice-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .practice-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #f8fafc;
+            color: var(--text-main);
+            border: 1px solid var(--border-light);
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.76rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .practice-pill:hover {
+            background: var(--accent-blue);
+            color: #ffffff;
+            border-color: var(--accent-blue);
+            transform: translateY(-1px);
+        }
+
+        .practice-pill-gold {
+            background: #fefce8;
+            color: #854d0e;
+            border-color: #fef08a;
+            font-weight: 700;
+        }
+
+        .practice-pill-gold:hover {
+            background: #eab308;
+            color: #000;
+            border-color: #ca8a04;
+        }
+
+        .pill-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            opacity: 0.85;
+        }
+
+        .practice-filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .filter-chip {
+            background: #ffffff;
+            color: var(--text-muted);
+            border: 1px solid var(--border-light);
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--accent-blue);
+            color: var(--accent-blue);
+        }
+
+        .filter-chip.active {
+            background: var(--primary-navy);
+            color: #ffffff;
+            border-color: var(--primary-navy);
+            box-shadow: 0 2px 4px rgba(15, 43, 72, 0.2);
+        }
+
+        /* Option Item Interactive States */
+        .options-list li {
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .options-list li:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .options-list li.user-selected {
+            outline: 2px solid var(--accent-blue);
+        }
+
+        .options-list li.user-selected.correct-option {
+            outline: 2px solid #22c55e;
+        }
 
         .question-body {
             padding: 18px 20px;
@@ -815,6 +1033,324 @@ def get_header_and_styles():
             }
         }
 
+        /* ============================================================ */
+        /* CBT INTERACTIVE EXAM TESTING STYLES                          */
+        /* ============================================================ */
+        .cbt-test-section {
+            background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
+            border: 2px solid #3b82f6;
+            border-radius: 12px;
+            padding: 24px;
+            margin: 36px 0;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+        }
+
+        .cbt-test-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 16px;
+            margin-bottom: 22px;
+        }
+
+        .cbt-header-left {
+            flex: 1;
+            min-width: 260px;
+        }
+
+        .cbt-badge {
+            display: inline-block;
+            background: #dbeafe;
+            color: #1d4ed8;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 6px;
+        }
+
+        .cbt-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-navy);
+            margin: 2px 0 4px;
+        }
+
+        .cbt-subtitle {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .cbt-header-right {
+            flex-shrink: 0;
+        }
+
+        .cbt-score-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #ffffff;
+            border: 2px solid #2563eb;
+            border-radius: 10px;
+            padding: 8px 18px;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.12);
+            min-width: 110px;
+        }
+
+        .cbt-score-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+        }
+
+        .cbt-score-val {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #2563eb;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .test-question-card {
+            background: #ffffff;
+            border: 1px solid var(--border-light);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .test-question-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: #cbd5e1;
+        }
+
+        .test-q-header {
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 18px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .test-q-meta {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .test-q-badge {
+            background: var(--primary-navy);
+            color: #ffffff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        .test-formula-tag {
+            background: #f1f5f9;
+            color: var(--text-muted);
+            font-size: 0.74rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .test-points-badge {
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: #059669;
+            background: #ecfdf5;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #a7f3d0;
+        }
+
+        .test-q-body {
+            padding: 18px 20px;
+        }
+
+        .test-q-prompt {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-main);
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        .test-options-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .test-opt-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 10px 14px;
+            background: #f8fafc;
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .test-opt-label:hover {
+            background: #f1f5f9;
+            border-color: #94a3b8;
+        }
+
+        .test-opt-label input[type="radio"] {
+            margin-top: 4px;
+            accent-color: #2563eb;
+            cursor: pointer;
+        }
+
+        .test-opt-key {
+            font-weight: 700;
+            font-size: 0.86rem;
+            color: var(--secondary-navy);
+            min-width: 18px;
+        }
+
+        .test-opt-val {
+            font-size: 0.92rem;
+            color: var(--text-main);
+            flex: 1;
+        }
+
+        .test-opt-label.is-correct {
+            background: #ecfdf5 !important;
+            border: 2px solid #10b981 !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
+
+        .test-opt-label.is-wrong {
+            background: #fef2f2 !important;
+            border: 2px solid #ef4444 !important;
+            color: #991b1b !important;
+        }
+
+        .test-opt-label.reveal-correct {
+            background: #ecfdf5 !important;
+            border: 2px dashed #10b981 !important;
+            color: #065f46 !important;
+            font-weight: 600;
+        }
+
+        .test-actions-bar {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .btn-test-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-test-check {
+            background: var(--primary-navy);
+            color: #ffffff;
+        }
+
+        .btn-test-check:hover {
+            background: var(--accent-blue);
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-test-reset {
+            background: #f8fafc;
+            color: var(--text-muted);
+            border-color: var(--border-light);
+        }
+
+        .btn-test-reset:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .test-feedback-pill {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.84rem;
+            font-weight: 600;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        .feedback-correct {
+            background: #ecfdf5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .feedback-wrong {
+            background: #fef2f2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .feedback-warn {
+            background: #fffbeb;
+            color: #92400e;
+            border: 1px solid #fcd34d;
+        }
+
+        .practice-pill-test {
+            background: #eff6ff;
+            color: #1e40af;
+            border-color: #bfdbfe;
+            font-weight: 700;
+        }
+
+        .practice-pill-test:hover {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        .filter-chip-test {
+            background: #eff6ff;
+            color: #1d4ed8;
+            border-color: #93c5fd;
+            font-weight: 700;
+        }
+
+        .filter-chip-test:hover {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
         /* Responsive Mobile Layout */
         @media (max-width: 900px) {
             .sidebar {
@@ -917,6 +1453,70 @@ def get_header_and_styles():
                     <span>Exam Day Cheatsheet</span>
                 </a>
             </li>
+            <li class="nav-section-title"><span>📝 Practice Questions</span></li>
+            <li class="nav-item">
+                <a href="#week1-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P1</span>
+                    <span>W1 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week2-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P2</span>
+                    <span>W2 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week3-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P3</span>
+                    <span>W3 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week4-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P4</span>
+                    <span>W4 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week5-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P5</span>
+                    <span>W5 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week6-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P6</span>
+                    <span>W6 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week7-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P7</span>
+                    <span>W7 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#week8-practice" class="nav-link">
+                    <span class="nav-badge" style="background:#e0f2fe;color:#0369a1;">P8</span>
+                    <span>W8 Practice (MCQ/MSQ)</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#mega-exam-question-bank" class="nav-link" style="background:rgba(234,179,8,0.12);border:1px solid rgba(234,179,8,0.25);">
+                    <span class="nav-badge" style="background:#fef08a;color:#854d0e;">🏆</span>
+                    <span style="color:#fde047;font-weight:700;">Mega Exam Question Bank</span>
+                </a>
+            </li>
+            <li class="nav-section-title"><span>⚡ Formula CBT Tests (56 Qs)</span></li>
+            <li class="nav-item"><a href="#week1-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T1</span><span>W1 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week2-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T2</span><span>W2 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week3-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T3</span><span>W3 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week4-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T4</span><span>W4 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week5-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T5</span><span>W5 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week6-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T6</span><span>W6 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week7-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T7</span><span>W7 CBT Test (7 Qs)</span></a></li>
+            <li class="nav-item"><a href="#week8-cbt-test" class="nav-link"><span class="nav-badge" style="background:#fef3c7;color:#b45309;">T8</span><span>W8 CBT Test (7 Qs)</span></a></li>
         </ul>
     </aside>
 
@@ -936,36 +1536,104 @@ def get_header_and_styles():
                 <span>💻 <strong>Software:</strong> R Programming Environment</span>
             </div>
         </header>
+
+        <!-- Sticky Practice Questions Navigation Bar -->
+        <nav class="practice-navbar-sticky" id="practiceNavbar" aria-label="Practice Questions Navigation">
+            <div class="practice-navbar-container">
+                <div class="practice-navbar-top">
+                    <div class="practice-navbar-brand">
+                        <span class="practice-icon">🎯</span>
+                        <div>
+                            <div class="practice-title">NPTEL Practice Questions Hub</div>
+                            <div class="practice-sub">Direct week jumps &bull; Interactive MCQ &amp; MSQ exam filters &bull; Instant solutions</div>
+                        </div>
+                    </div>
+                    <div class="practice-actions">
+                        <button type="button" class="btn-practice-action" onclick="toggleAllSolutions(true)">👁️ Expand All Solutions</button>
+                        <button type="button" class="btn-practice-action" onclick="toggleAllSolutions(false)">🙈 Collapse All</button>
+                    </div>
+                </div>
+                <div class="practice-navbar-bottom">
+                    <div class="practice-jump-row">
+                        <span class="practice-label">Jump to Week:</span>
+                        <div class="practice-pills">
+                            <a href="#week1-practice" class="practice-pill"><span class="pill-badge">W1</span> R Basics</a>
+                            <a href="#week2-practice" class="practice-pill"><span class="pill-badge">W2</span> Linear Alg</a>
+                            <a href="#week3-practice" class="practice-pill"><span class="pill-badge">W3</span> Prob &amp; Stat</a>
+                            <a href="#week4-practice" class="practice-pill"><span class="pill-badge">W4</span> Univar Opt</a>
+                            <a href="#week5-practice" class="practice-pill"><span class="pill-badge">W5</span> Multivar Opt</a>
+                            <a href="#week6-practice" class="practice-pill"><span class="pill-badge">W6</span> Regression</a>
+                            <a href="#week7-practice" class="practice-pill"><span class="pill-badge">W7</span> Logistic Reg</a>
+                            <a href="#week8-practice" class="practice-pill"><span class="pill-badge">W8</span> KNN &amp; KMeans</a>
+                            <a href="#mega-exam-question-bank" class="practice-pill practice-pill-gold"><span class="pill-badge">🏆</span> Mega Exam Bank (MCQ/MSQ)</a>
+                        </div>
+                    </div>
+                    <div class="practice-jump-row" style="margin-top: 4px;">
+                        <span class="practice-label" style="color:#2563eb;">⚡ CBT Tests (7 Qs/Wk):</span>
+                        <div class="practice-pills">
+                            <a href="#week1-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W1</span> Test</a>
+                            <a href="#week2-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W2</span> Test</a>
+                            <a href="#week3-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W3</span> Test</a>
+                            <a href="#week4-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W4</span> Test</a>
+                            <a href="#week5-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W5</span> Test</a>
+                            <a href="#week6-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W6</span> Test</a>
+                            <a href="#week7-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W7</span> Test</a>
+                            <a href="#week8-cbt-test" class="practice-pill practice-pill-test"><span class="pill-badge">W8</span> Test</a>
+                        </div>
+                    </div>
+                    <div class="practice-filter-row">
+                        <span class="practice-label">Filter Questions:</span>
+                        <div class="practice-filter-chips">
+                            <button type="button" class="filter-chip active" onclick="filterQuestions('all', this)">All Questions (104+)</button>
+                            <button type="button" class="filter-chip filter-chip-test" onclick="filterQuestions('filter-test', this)">⚡ Formula CBT Tests (56 Qs)</button>
+                            <button type="button" class="filter-chip" onclick="filterQuestions('filter-mcq', this)">🎯 Single-Correct MCQs</button>
+                            <button type="button" class="filter-chip" onclick="filterQuestions('filter-msq', this)">☑️ Multi-Select MSQs</button>
+                            <button type="button" class="filter-chip" onclick="filterQuestions('filter-assignment', this)">📑 Assignment Showcases</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
 """
+
+def inject_week_test(week_html, w_num):
+    """Inject interactive CBT 7-question test directly before </article> in the week module."""
+    test_html = get_week_test_content(w_num)
+    if "</article>" in week_html:
+        return week_html.replace("</article>", f"{test_html}\n        </article>")
+    return week_html + test_html
 
 def assemble_guide():
     parts = []
     print("Adding Header and Styles...")
     parts.append(get_header_and_styles())
     
-    print("Adding Week 1: Introduction to R...")
-    parts.append(get_week1_content())
+    print("Adding Week 1: Introduction to R (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week1_content(), 1))
     
-    print("Adding Week 2: Linear Algebra...")
-    parts.append(get_week2_content())
+    print("Adding Week 2: Linear Algebra (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week2_content(), 2))
     
-    print("Adding Week 3: Probability & Statistics...")
-    parts.append(get_week3_content())
+    print("Adding Week 3: Probability & Statistics (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week3_content(), 3))
     
-    print("Adding Week 4: Optimization Univariate...")
-    parts.append(get_week4_content())
+    print("Adding Week 4: Optimization Univariate (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week4_content(), 4))
     
-    print("Adding Week 5: Multivariate & Constrained Opt...")
-    parts.append(get_week5_content())
+    print("Adding Week 5: Multivariate & Constrained Opt (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week5_content(), 5))
     
-    print("Adding Week 6: Linear Regression...")
-    parts.append(get_week6_content())
+    print("Adding Week 6: Linear Regression (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week6_content(), 6))
     
-    print("Adding Week 7: Classification & Logistic Regression...")
-    parts.append(get_week7_content())
+    print("Adding Week 7: Classification & Logistic Regression (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week7_content(), 7))
     
-    print("Adding Week 8: KNN & K-Means Clustering...")
-    parts.append(get_week8_content())
+    print("Adding Week 8: KNN & K-Means Clustering (with CBT 7-Q Test)...")
+    parts.append(inject_week_test(get_week8_content(), 8))
+    
+    print("Adding Mega NPTEL Exam Practice Question Bank (MCQ & MSQ)...")
+    parts.append(get_practice_bank_content())
     
     print("Adding Master Exam Cheatsheet & Footer...")
     parts.append(get_exam_cheatsheet_content())

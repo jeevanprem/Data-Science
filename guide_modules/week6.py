@@ -357,11 +357,11 @@ def get_week6_content():
                 </section>
 
                 <!-- Section 4: Topic-Wise Example Questions with Solutions -->
-                <section class="section-block">
+                <section class="section-block" id="week6-practice">
                     <h3 class="section-heading"><span class="badge-indicator"></span> 4. Topic-Wise Example Questions with Solutions</h3>
 
                     <!-- Question 1 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-calc">Topic: Reading Regression Equations</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL bonds.txt Case</span>
@@ -401,7 +401,7 @@ def get_week6_content():
                     </div>
 
                     <!-- Question 2 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-concept">Topic: Goodness-of-Fit Interpretation</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -434,7 +434,7 @@ def get_week6_content():
                     </div>
 
                     <!-- Question 3 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-calc">Topic: Sum of Squares Arithmetic</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -469,7 +469,7 @@ def get_week6_content():
 
                 <!-- Section 5: Dedicated Assignment-Style Practice Question -->
                 <section class="section-block">
-                    <div class="assignment-showcase">
+                    <div class="assignment-showcase filter-item filter-assignment">
                         <div class="assignment-banner">
                             <span>📝 DEDICATED ASSIGNMENT-STYLE PRACTICE CHALLENGE</span>
                             <span>Week 6 Comprehensive</span>

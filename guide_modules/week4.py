@@ -318,11 +318,11 @@ def get_week4_content():
                 </section>
 
                 <!-- Section 4: Topic-Wise Example Questions with Solutions -->
-                <section class="section-block">
+                <section class="section-block" id="week4-practice">
                     <h3 class="section-heading"><span class="badge-indicator"></span> 4. Topic-Wise Example Questions with Solutions</h3>
 
                     <!-- Question 1 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-calc">Topic: Stationary Points &amp; Extrema of Cubic Polynomial</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -372,7 +372,7 @@ def get_week4_content():
                     </div>
 
                     <!-- Question 2 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-concept">Topic: Second-Order Sufficient Condition</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -405,7 +405,7 @@ def get_week4_content():
                     </div>
 
                     <!-- Question 3 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-calc">Topic: Extrema of Trigonometric Function</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -444,7 +444,7 @@ def get_week4_content():
 
                 <!-- Section 5: Dedicated Assignment-Style Practice Question -->
                 <section class="section-block">
-                    <div class="assignment-showcase">
+                    <div class="assignment-showcase filter-item filter-assignment">
                         <div class="assignment-banner">
                             <span>📝 DEDICATED ASSIGNMENT-STYLE PRACTICE CHALLENGE</span>
                             <span>Week 4 Comprehensive</span>

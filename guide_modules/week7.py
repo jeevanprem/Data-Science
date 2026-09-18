@@ -367,11 +367,11 @@ def get_week7_content():
                 </section>
 
                 <!-- Section 4: Topic-Wise Example Questions with Solutions -->
-                <section class="section-block">
+                <section class="section-block" id="week7-practice">
                     <h3 class="section-heading"><span class="badge-indicator"></span> 4. Topic-Wise Example Questions with Solutions</h3>
 
                     <!-- Question 1 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-concept">Topic: Cross-Validation vs Bias-Variance</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -403,7 +403,7 @@ def get_week7_content():
                     </div>
 
                     <!-- Question 2 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-concept">Topic: Classification vs Regression Problems</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -437,7 +437,7 @@ def get_week7_content():
                     </div>
 
                     <!-- Question 3 -->
-                    <div class="question-card">
+                    <div class="question-card filter-item filter-mcq">
                         <div class="question-header">
                             <span class="q-tag q-tag-calc">Topic: Confusion Matrix Metric Calculation</span>
                             <span style="font-size: 0.8rem; color: var(--text-muted);">NPTEL Core Standard</span>
@@ -479,7 +479,7 @@ def get_week7_content():
 
                 <!-- Section 5: Dedicated Assignment-Style Practice Question -->
                 <section class="section-block">
-                    <div class="assignment-showcase">
+                    <div class="assignment-showcase filter-item filter-assignment">
                         <div class="assignment-banner">
                             <span>📝 DEDICATED ASSIGNMENT-STYLE PRACTICE CHALLENGE</span>
                             <span>Week 7 Comprehensive</span>

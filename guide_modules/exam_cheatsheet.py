@@ -346,16 +346,138 @@ def get_exam_cheatsheet_content():
         });
     }
 
+    // ==========================================
+    // CBT INTERACTIVE EXAM TESTING LOGIC
+    // ==========================================
+    function checkCbtAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        if (!card) return;
+        const correct = card.getAttribute('data-correct');
+        const selected = card.querySelector('input[type="radio"]:checked');
+        const feedback = document.getElementById(cardId + '-feedback');
+        const solDrawer = document.getElementById(cardId + '-sol');
+        
+        if (!selected) {
+            if (feedback) {
+                feedback.style.display = 'inline-block';
+                feedback.className = 'test-feedback-pill feedback-warn';
+                feedback.innerHTML = '⚠️ <strong>Please select an option first!</strong>';
+            }
+            return;
+        }
+        
+        // Remove previous state classes from all labels in this card
+        card.querySelectorAll('.test-opt-label').forEach(l => {
+            l.classList.remove('is-correct', 'is-wrong', 'reveal-correct');
+        });
+        
+        const chosenOpt = selected.value;
+        const chosenLabel = card.querySelector(`.test-opt-label[data-opt="${chosenOpt}"]`);
+        
+        if (chosenOpt === correct) {
+            if (chosenLabel) chosenLabel.classList.add('is-correct');
+            if (feedback) {
+                feedback.style.display = 'inline-block';
+                feedback.className = 'test-feedback-pill feedback-correct';
+                feedback.innerHTML = '🎉 <strong>Correct! (+1 Mark)</strong> Excellent application of the formula.';
+            }
+        } else {
+            if (chosenLabel) chosenLabel.classList.add('is-wrong');
+            const correctLabel = card.querySelector(`.test-opt-label[data-opt="${correct}"]`);
+            if (correctLabel) correctLabel.classList.add('reveal-correct');
+            if (feedback) {
+                feedback.style.display = 'inline-block';
+                feedback.className = 'test-feedback-pill feedback-wrong';
+                feedback.innerHTML = `❌ <strong>Incorrect!</strong> You chose <strong>(${chosenOpt})</strong>, but the correct answer is <strong>(${correct})</strong>. Full step-by-step solution automatically opened below:`;
+            }
+            // Automatically open full solution drawer on incorrect attempt
+            if (solDrawer) {
+                solDrawer.open = true;
+            }
+        }
+        
+        // Update live score counter for this week
+        const match = cardId.match(/cbt-w(\d+)-q/);
+        if (match) {
+            updateTestScore(match[1]);
+        }
+    }
+
+    function resetCbtAnswer(cardId) {
+        const card = document.getElementById(cardId);
+        if (!card) return;
+        const checked = card.querySelector('input[type="radio"]:checked');
+        if (checked) checked.checked = false;
+        
+        card.querySelectorAll('.test-opt-label').forEach(l => {
+            l.classList.remove('is-correct', 'is-wrong', 'reveal-correct');
+        });
+        
+        const feedback = document.getElementById(cardId + '-feedback');
+        if (feedback) {
+            feedback.style.display = 'none';
+            feedback.innerHTML = '';
+        }
+        
+        const solDrawer = document.getElementById(cardId + '-sol');
+        if (solDrawer) {
+            solDrawer.open = false;
+        }
+        
+        const match = cardId.match(/cbt-w(\d+)-q/);
+        if (match) {
+            updateTestScore(match[1]);
+        }
+    }
+
+    function updateTestScore(weekNum) {
+        const scoreValEl = document.getElementById(`w${weekNum}-score-val`);
+        if (!scoreValEl) return;
+        let correctCount = 0;
+        for (let q = 1; q <= 7; q++) {
+            const card = document.getElementById(`cbt-w${weekNum}-q${q}`);
+            if (!card) continue;
+            const correct = card.getAttribute('data-correct');
+            const selected = card.querySelector('input[type="radio"]:checked');
+            if (selected && selected.value === correct) {
+                correctCount++;
+            }
+        }
+        scoreValEl.textContent = `${correctCount} / 7`;
+    }
+
+
+    // Filter Practice Questions (MCQ, MSQ, Assignment, All)
+    function filterQuestions(filterClass, btn) {
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+
+        const items = document.querySelectorAll('.filter-item');
+        items.forEach(item => {
+            if (filterClass === 'all' || item.classList.contains(filterClass)) {
+                item.style.display = '';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
     // Toggle All Solutions for Self-Testing
     let solutionsExpanded = false;
-    function toggleAllSolutions() {
+    function toggleAllSolutions(forceOpen) {
         const drawers = document.querySelectorAll('details.solution-drawer');
-        solutionsExpanded = !solutionsExpanded;
+        if (forceOpen !== undefined) {
+            solutionsExpanded = forceOpen;
+        } else {
+            solutionsExpanded = !solutionsExpanded;
+        }
         drawers.forEach(d => {
             d.open = solutionsExpanded;
         });
         const btn = document.getElementById('btn-toggle-solutions');
-        btn.textContent = solutionsExpanded ? '🙈 Collapse Solutions' : '👁️ Toggle Solutions';
+        if (btn) {
+            btn.textContent = solutionsExpanded ? '🙈 Collapse Solutions' : '👁️ Toggle Solutions';
+        }
     }
 
     // Smooth Scroll for Internal Anchor Links
@@ -370,6 +492,21 @@ def get_exam_cheatsheet_content():
                     block: 'start'
                 });
             }
+        });
+    });
+
+    // Interactive Option Selection Feedback
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.options-list li').forEach(li => {
+            li.addEventListener('click', function() {
+                const parentList = this.closest('.options-list');
+                const card = this.closest('.question-card');
+                const isMsq = card ? card.classList.contains('filter-msq') : false;
+                if (!isMsq && parentList) {
+                    parentList.querySelectorAll('li').forEach(item => item.classList.remove('user-selected'));
+                }
+                this.classList.toggle('user-selected');
+            });
         });
     });
 </script>
